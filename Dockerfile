@@ -56,7 +56,7 @@ RUN apt-get update && apt-get install -y \
 # install dependencies
 # See https://pytorch.org/ for other options if you use a different version of CUDA
 # RUN pip install --user tensorboard cmake onnx   # cmake from apt-get is too old
-RUN apt-get install python3-wheel
+RUN apt-get install  -y  python3-wheel
 RUN python -m pip install wheel
 
 RUN python -m pip install pyyaml==5.1
