@@ -18,7 +18,7 @@ RUN pip3 install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/
 RUN git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api
 RUN mkdir outputs
 RUN mv "fi-ber-detec-api/model_final (1).pth" "outputs/model_final.pth"
-RUN ls ./ouptus
+RUN ls ./outputs
 RUN ls ./fi-ber-detec-api
 RUN pip3 install pyyaml==5.1
 RUN pip3 install 'git+https://github.com/facebookresearch/detectron2.git'
