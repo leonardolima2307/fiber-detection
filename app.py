@@ -17,12 +17,7 @@ from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
-try:
-    import cloudinary
-except:
-    import os 
-    os.system('pip install cloudinary')
-
+import cloudinary
 import cv2
 import json
 from matplotlib.pyplot import axis
@@ -87,8 +82,8 @@ def init():
     # model_name = os.getenv("MODEL_NAME")
     model  = DefaultPredictor(cfg)
     
-def decodeBase64Image(imageStr: str) -> PIL.Image:
-    return PIL.Image.open(BytesIO(base64.decodebytes(bytes(imageStr, "utf-8"))))
+# def decodeBase64Image(imageStr: str) -> PIL.Image:
+#     return PIL.Image.open(BytesIO(base64.decodebytes(bytes(imageStr, "utf-8"))))
 
 # Inference is ran for every server call
 # Reference your preloaded global model variable here.
