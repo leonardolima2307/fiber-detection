@@ -38,7 +38,7 @@ ENV TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}"
 # Set a fixed model cache directory.
 ENV FVCORE_CACHE="/tmp"
 # WORKDIR /home/appuser/detectron2_repo
-WORKDIR /
+# WORKDIR /
 
 
 RUN git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api
