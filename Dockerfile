@@ -2,19 +2,22 @@ FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu18.04
 # use an older system (18.04) to avoid opencv incompatibility (issue#3524)
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:deadsnakes/ppa -y
-RUN apt-get install -y python3.8
+# RUN apt-get update
+# RUN apt-get install -y software-properties-common
+# RUN add-apt-repository ppa:deadsnakes/ppa -y
+# RUN apt-get install -y python3.8
 
-RUN apt-get install -y python3-pip
-
+# RUN apt-get install -y python3-pip
+RUN rm /usr/bin/python && rm /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python &&  ln -s /usr/bin/python3.8 /usr/bin/python3 \
+    && rm /usr/local/bin/python && rm /usr/local/bin/python3 && ln -s /usr/bin/python3.8 /usr/local/bin/python &&  ln -s /usr/bin/python3.8 /usr/local/bin/python3 \
+    && apt-get install -y python3-pip python-dev python3.8-dev && python3 -m pip install pip --upgrade
+    
 RUN apt-get update && apt-get install -y \
 	python3-opencv ca-certificates python3-dev git wget sudo ninja-build
-# RUN ln -sv /usr/bin/python3 /usr/bin/python
-# RUN ln -s /usr/bin/python3.8 /usr/bin/python
-RUN ln -s /usr/bin/pip3 /usr/bin/pip && \
-    ln -s /usr/bin/python3.8 /usr/bin/python
+# # RUN ln -sv /usr/bin/python3 /usr/bin/python
+# # RUN ln -s /usr/bin/python3.8 /usr/bin/python
+# RUN ln -s /usr/bin/pip3 /usr/bin/pip && \
+#     ln -s /usr/bin/python3.8 /usr/bin/python
 
 # create a non-root user
 ARG USER_ID=1000
