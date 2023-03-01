@@ -56,6 +56,9 @@ RUN apt-get update && apt-get install -y \
 # install dependencies
 # See https://pytorch.org/ for other options if you use a different version of CUDA
 # RUN pip install --user tensorboard cmake onnx   # cmake from apt-get is too old
+RUN apt-get install wheel
+RUN python -m ip install wheel
+
 RUN python -m pip install pyyaml==5.1
 RUN  python -m pip  install   torch==1.10 torchvision==0.11.1 -f https://download.pytorch.org/whl/cu111/torch_stable.html
 
