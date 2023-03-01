@@ -59,7 +59,7 @@ RUN apt-get update && apt-get install -y \
 RUN python -m pip install pyyaml==5.1
 RUN  python -m pip  install   torch==1.10 torchvision==0.11.1 -f https://download.pytorch.org/whl/cu111/torch_stable.html
 
-RUN python -m pip  pip install 'git+https://github.com/facebookresearch/fvcore'
+RUN python -m pip install 'git+https://github.com/facebookresearch/fvcore'
 # install detectron2
 RUN git clone https://github.com/facebookresearch/detectron2 detectron2_repo
 # set FORCE_CUDA because during `docker build` cuda is not accessible
