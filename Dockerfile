@@ -1,5 +1,5 @@
 # Must use a Cuda version 11+
-FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
+FROM gcr.io/kaggle-images/python:latest
 
 WORKDIR /
 
