@@ -6,6 +6,11 @@ WORKDIR /
 # Install git
 RUN apt-get update && apt-get install -y git
 RUN conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+# Install libraries related to detectron2
+RUN pip install -U torch==1.10 torchvision==0.11.1 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+RUN pip install cython pyyaml==5.1
+RUN pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
+RUN pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html
 
 RUN python3 -m pip install pyyaml==5.1
 RUN python3 -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
