@@ -16,8 +16,8 @@ RUN pip3 install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory
 RUN pip3 install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html
 
 RUN git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api
-RUN mkdir ./outputs
-RUN mv "./fi-ber-detec-api/model_final (1).pth" "./ouptus/model_final.pth"
+RUN mkdir outputs
+RUN mv "fi-ber-detec-api/model_final (1).pth" "ouptus/model_final.pth"
 RUN ls ./ouptus
 RUN ls ./fi-ber-detec-api
 RUN pip3 install pyyaml==5.1
