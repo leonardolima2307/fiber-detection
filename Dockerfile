@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # # RUN apt-get install -y python3.8
 
 # # RUN apt-get install -y python3-pip
-# RUN apt-get update -qq   && apt-get install -y -qq python3.8
+RUN apt-get update -qq   && apt-get install -y -qq python3.8
 # RUN rm /usr/bin/python && rm /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python &&  ln -s /usr/bin/python3.8 /usr/bin/python3 \
 #     && rm /usr/local/bin/python && rm /usr/local/bin/python3 && ln -s /usr/bin/python3.8 /usr/local/bin/python &&  ln -s /usr/bin/python3.8 /usr/local/bin/python3 \
 #     && apt-get install -y python3-pip python-dev python3.8-dev && python3 -m pip install pip --upgrade
@@ -27,7 +27,7 @@ ENV DEBIAN_FRONTEND noninteractive
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && :
-
+RUN ln -s /usr/bin/python3.8 /usr/local/bin/python &&  ln -s /usr/bin/python3.8 /usr/local/bin/python3 
 
 
 RUN apt-get update && apt-get install -y \
