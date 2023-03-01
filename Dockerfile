@@ -24,9 +24,9 @@ USER appuser
 WORKDIR /home/appuser
 
 ENV PATH="/home/appuser/.local/bin:${PATH}"
-RUN wget https://bootstrap.pypa.io/pip/3.8/get-pip.py && \
-	python get-pip.py --user && \
-	rm get-pip.py
+# RUN wget https://bootstrap.pypa.io/pip/3.8/get-pip.py && \
+# 	python get-pip.py --user && \
+# 	rm get-pip.py
 
 
 
