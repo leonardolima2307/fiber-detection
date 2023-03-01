@@ -8,9 +8,7 @@ import detectron2
 from detectron2.utils.logger import setup_logger
 setup_logger()
 
-# import some common libraries
-import matplotlib.pyplot as plt
-import numpy as np
+
 import cv2
 
 
@@ -28,7 +26,6 @@ except:
 import cv2
 import json
 from matplotlib.pyplot import axis
-import gradio as gr
 import requests
 import numpy as np
 from torch import nn
@@ -52,7 +49,7 @@ setup_logger()
 # import some common libraries
 import numpy as np
 import os, json, cv2, random
-from google.colab.patches import cv2_imshow
+
 
 # import some common detectron2 utilities
 from detectron2 import model_zoo
@@ -127,9 +124,9 @@ def inference(model_inputs:dict) -> dict:
         measurement = int(0.5+len(segmentation[0])/600)
         measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
     cloudinary.config(
-      cloud_name = Cloud_Name,
-      api_key = API_KEY,
-      api_secret = API_Secret,
+      cloud_name ="dwn1gc4fa",
+      api_key = "437434332838172",
+      api_secret = "LBV4C69UuS6ri3u8lcUl04WPPBQ",
       secure = True
     )
     
