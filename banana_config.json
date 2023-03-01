@@ -1,13 +1,14 @@
 {
-    "name": "Anything v4.0",
+    "name": "Detectron2 fiber detection",
     "category": "Computer Vision",
     "example_input": {
-        "prompt": "scenery, village, outdoors, sky, clouds",
-        "num_inference_steps": 50,
-        "guidance_scale": 7
+        "img_bytes": "<INPUT_IMAGE_BYTES>"
+
     },
     "example_output": {
-        "base64_output": "<BASE64_IMAGE>"
+        "image_link": "https://example.com/img.png",
+        "csv_link": "https://example.com/file.csv",
+
     },
-    "version": "2"
+    "version": "1"
 }
