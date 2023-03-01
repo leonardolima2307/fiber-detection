@@ -33,8 +33,7 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
 
 RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 
-RUN python -m pip install pyyaml==5.1
-RUN python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
+
 # Install python packages
 RUN pip install --upgrade pip
 ADD requirements.txt requirements.txt
