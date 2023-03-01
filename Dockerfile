@@ -28,8 +28,6 @@ ENV DEBIAN_FRONTEND noninteractive
     && rm -rf /var/lib/apt/lists/* \
     && :
 
-RUN python3.8 -m venv /venv
-ENV PATH=/venv/bin:$PATH
 
 
 RUN apt-get update && apt-get install -y \
