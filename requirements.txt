@@ -1,7 +1,6 @@
-sanic==22.6.2
-diffusers==0.10.2
-ftfy==6.1.1
-scipy==1.9.0
-transformers==4.25.1
-accelerate==0.15.0
 wget
+opencv-python-headless
+pyyaml==5.1
+torch
+torchvision
+
