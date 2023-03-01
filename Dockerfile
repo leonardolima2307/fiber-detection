@@ -33,7 +33,7 @@ ENV FORCE_CUDA="1"
 ARG TORCH_CUDA_ARCH_LIST="Kepler;Kepler+Tesla;Maxwell;Maxwell+Tegra;Pascal;Volta;Turing"
 ENV TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}"
 
-RUN pip install --user -e detectron2_repo
+#RUN pip install --user -e detectron2_repo
 
 # Set a fixed model cache directory.
 ENV FVCORE_CACHE="/tmp"
@@ -46,8 +46,8 @@ RUN mkdir outputs
 RUN mv "fi-ber-detec-api/model_final (1).pth" "outputs/model_final.pth"
 RUN ls ./outputs
 RUN ls ./fi-ber-detec-api
-# RUN pip install pyyaml==5.1
-# RUN pip install 'git+https://github.com/facebookresearch/detectron2.git'
+RUN pip install pyyaml==5.1
+RUN python pip install 'git+https://github.com/facebookresearch/detectron2.git'
 # Install python packages
 RUN pip install --upgrade pip
 ADD requirements.txt requirements.txt
