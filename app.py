@@ -70,7 +70,7 @@ cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # The "RoIHead batch size". 128
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
 # NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 
-cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")  # path to the model we just trained
+cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth")  # path to the model we just trained
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.005   # set a custom testing threshold
 
 
