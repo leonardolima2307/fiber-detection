@@ -7,6 +7,8 @@ WORKDIR /
 RUN apt-get update && apt-get install -y git
 RUN conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
 
+RUN python3 -m pip install pyyaml==5.1
+RUN python3 -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 # Install python packages
 RUN pip3 install --upgrade pip
 ADD requirements.txt requirements.txt
