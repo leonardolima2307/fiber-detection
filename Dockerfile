@@ -32,9 +32,9 @@ ENV PATH="/home/appuser/.local/bin:${PATH}"
 
 # install dependencies
 # See https://pytorch.org/ for other options if you use a different version of CUDA
-RUN pip install --user tensorboard cmake onnx   # cmake from apt-get is too old
+# RUN pip install --user tensorboard cmake onnx   # cmake from apt-get is too old
 RUN pip install --user torch==1.10 torchvision==0.11.1 -f https://download.pytorch.org/whl/cu111/torch_stable.html
-
+RUN python -m pip install pyyaml==5.1
 RUN pip install --user 'git+https://github.com/facebookresearch/fvcore'
 # install detectron2
 RUN git clone https://github.com/facebookresearch/detectron2 detectron2_repo
