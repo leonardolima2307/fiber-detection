@@ -72,7 +72,7 @@ cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (ballon). (see https:/
 # NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 
 cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth")  # path to the model we just trained
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.005   # set a custom testing threshold
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.001   # set a custom testing threshold
 
 from detectron2.data.datasets import register_coco_instances
 os.makedirs("./Fiber", exist_ok=True)
@@ -133,10 +133,10 @@ def inference(model_inputs:dict) -> dict:
           y_max = int(np.max(segmentation[0]))
           measurement = int(0.5+len(segmentation[0])/300)
           measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
-          cv2.putText(img=im, text=str(int(0.5+len( segmentation[0])/600)), org=(x_min+20,y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)        
+          cv2.putText(img=im, text=str(int(0.5+len( segmentation[0])/300)), org=(x_min+20,y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)        
     for ind, item_mask in enumerate(masks):
         segmentation = np.where(item_mask == True)
-        measurement = int(0.5+len(segmentation[0])/600)
+        measurement = int(0.5+len(segmentation[0])/300)
         measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
     cloudinary.config(
       cloud_name ="dwn1gc4fa",
