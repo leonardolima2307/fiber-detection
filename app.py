@@ -89,6 +89,7 @@ Fiber_metadata = MetadataCatalog.get("Fiber")
 dataset_dicts = DatasetCatalog.get("Fiber")
 my_metadata=Fiber_metadata
 from io import BytesIO,StringIO
+import cloudinary.uploader
 # Init is ran on server startup
 # Load your model to GPU as a global variable here using the variable name "model"
 def init():
