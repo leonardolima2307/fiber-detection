@@ -93,6 +93,7 @@ def inference(model_inputs:dict) -> dict:
     img_byte_str = model_inputs.get('img_bytes', None)
     nparr = np.fromstring(base64.b64decode(img_byte_str), np.uint8)
     input = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    im=input
 
     global model
     outputs = model(input)
