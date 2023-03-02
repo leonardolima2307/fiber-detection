@@ -55,7 +55,7 @@ from detectron2.data import MetadataCatalog, DatasetCatalog
 
 from detectron2.structures import BoxMode
 from detectron2.engine import DefaultTrainer
-
+from detectron2.utils.visualizer import ColorMode
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
 cfg.DATASETS.TRAIN = ("Fiber",)
