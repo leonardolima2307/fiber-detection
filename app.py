@@ -154,7 +154,6 @@ def inference(model_inputs:dict) -> dict:
     #     buffered = BytesIO()
     #     v.get_image().save(buffered,format="JPEG")
     #     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    import base64
     retval, buffer = cv2.imencode('.png', image)
     image_bytes = base64.b64encode(buffer)
     #     # Upload the file to Cloudinary
