@@ -10,7 +10,7 @@ setup_logger()
 
 
 import cv2
-
+import io
 
 # import some common detectron2 utilities
 from detectron2.engine import DefaultPredictor
