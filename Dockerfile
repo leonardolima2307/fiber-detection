@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" \
 RUN pip install --no-cache-dir torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 \
     -f https://download.pytorch.org/whl/torch_stable.html
 
-# WORKDIR /opt
+WORKDIR /opt
 
 RUN git clone https://github.com/facebookresearch/detectron2.git && \
     cd detectron2 && \
@@ -32,7 +32,7 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
     pip install --no-cache-dir .
 
 RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
-
+WORKDIR /
 
 # Install python packages
 RUN pip install --upgrade pip
