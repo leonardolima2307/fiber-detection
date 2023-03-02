@@ -80,7 +80,7 @@ try:
 except:
   if not os.isdir("fi-ber-detec-api"):
     os.system('git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api')
-  os.system("cp fi-ber-detec-api/labels-fiver.json ."
+  os.system("cp fi-ber-detec-api/labels-fiver.json .")
   DatasetCatalog.clear()
   register_coco_instances("Fiber", {}, "./labels-fiver.json", "Fiber")
 
