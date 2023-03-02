@@ -151,31 +151,36 @@ def inference(model_inputs:dict) -> dict:
             # Convert the CSV content to a bytes object
     
     csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
-    
-    # Upload the file to Cloudinary
-    import cloudinary
-    import cloudinary.uploader
+    #     buffered = BytesIO()
+    #     v.get_image().save(buffered,format="JPEG")
+    #     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    import base64
+    retval, buffer = cv2.imencode('.png', image)
+    image_bytes = base64.b64encode(buffer)
+    #     # Upload the file to Cloudinary
+    #     import cloudinary
+    #     import cloudinary.uploader
 
-    import cloudinary.api
-    upload_result = cloudinary.uploader.upload(
-    csv_bytes,
-    resource_type = "raw",
-    folder = "csv_files",
-    public_id =filename,
-    overwrite = False
-    )
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.uploader.upload
-    import cloudinary.api
-    
-    # Upload the image output to Cloudinary
-    uploaded_image = cloudinary.uploader.upload(
-    v.get_image(),
-    resource_type = "raw",
-    folder = "image_files",
-    public_id =filename,
-    overwrite = False
-    )
+    #     import cloudinary.api
+    #     upload_result = cloudinary.uploader.upload(
+    #     csv_bytes,
+    #     resource_type = "raw",
+    #     folder = "csv_files",
+    #     public_id =filename,
+    #     overwrite = False
+    #     )
+    #     import cloudinary
+    #     import cloudinary.uploader
+    #     import cloudinary.uploader.upload
+    #     import cloudinary.api
+
+    #     # Upload the image output to Cloudinary
+    #     uploaded_image = cloudinary.uploader.upload(
+    #     v.get_image(),
+    #     resource_type = "raw",
+    #     folder = "image_files",
+    #     public_id =filename,
+    #     overwrite = False
+    #     )
     # Return the results as a dictionary
-    return {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
+    return {"csv_bytes":csv_bytes,"image_bytes":image_bytes} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
