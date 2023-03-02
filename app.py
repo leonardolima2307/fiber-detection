@@ -121,7 +121,9 @@ def inference(model_inputs:dict) -> dict:
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
     masks = np.asarray(outputs["instances"].pred_masks.to("cpu"))
     measurements = {}
-    im=v.get_image() 
+    filepath_tmp=str(time.time())+".jpeg"
+    v.save(filepath_tmp)
+    im=cv2.imread(filepath_tmp)
     for ind,item_mask in enumerate(masks):
         segmentation = np.where(item_mask == True)
         if  segmentation[1].any() and segmentation[0].any():
@@ -158,8 +160,8 @@ def inference(model_inputs:dict) -> dict:
         csv_bytes = f.read()
     csv_bytes = base64.b64encode(csv_bytes)
     csv_base64_str = csv_bytes.decode('utf-8')
-    filepath_tmp=str(time.time())+".jpeg"
-    v.save(filepath_tmp)
+    #     filepath_tmp=str(time.time())+".jpeg"
+    #     v.save(filepath_tmp)
     image  = Image.fromarray(im) #Image.open(filepath_tmp)#Image.fromarray(x_sample.astype(np.uint8))
     buffered = BytesIO()
     image.save(buffered,format="JPEG")
