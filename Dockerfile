@@ -41,7 +41,8 @@ RUN pip install gdown
 RUN gdown 1--tX-6WDulxzgqRTyMGXpk2COGp3mIhV
 RUN mv "model_final.pth" "outputs/model_final.pth"
 # RUN mv "fi-ber-detec-api/model_final.pth" "outputs/model_final.pth"
-
+RUN mv "fi-ber-detec-api/labels-fiver.json" "./labels-fiver.json"
+RUN mkdir "./Fiber"
 # Install python packages
 RUN pip install --upgrade pip
 ADD requirements.txt requirements.txt
