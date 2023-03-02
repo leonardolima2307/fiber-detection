@@ -151,6 +151,7 @@ def inference(model_inputs:dict) -> dict:
             # Convert the CSV content to a bytes object
     
     csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
+    csv_bytes=base64.b64encode(csv_bytes)
     #     buffered = BytesIO()
     #     v.get_image().save(buffered,format="JPEG")
     #     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
