@@ -151,8 +151,12 @@ def inference(model_inputs:dict) -> dict:
             writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
             # Convert the CSV content to a bytes object
     
-    csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
-    csv_bytes=base64.b64encode(csv_bytes).decode('utf-8')
+    #     csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
+    #     csv_bytes=base64.b64encode(csv_bytes).decode('utf-8')
+    with open(filename, 'rb') as f:
+        csv_bytes = f.read()
+    csv_bytes = base64.b64encode(csv_bytes)
+    csv_base64_str = csv_bytes.decode('utf-8')
     filepath_tmp=str(time.time())+".jpeg"
     v.save(filepath_tmp)
     image = Image.open(filepath_tmp)#Image.fromarray(x_sample.astype(np.uint8))
@@ -190,4 +194,4 @@ def inference(model_inputs:dict) -> dict:
     #     overwrite = False
     #     )
     # Return the results as a dictionary
-    return {"csv_bytes":"","image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
+    return {"csv_bytes":csv_base64_str,"image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
