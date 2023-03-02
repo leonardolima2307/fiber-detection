@@ -64,4 +64,4 @@ ADD app.py .
 # Expose docker port
 EXPOSE 8000
 
-CMD python3 -u server.py
+CMD python3 -u server.py 
