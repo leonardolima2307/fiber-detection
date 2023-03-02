@@ -128,7 +128,7 @@ def inference(model_inputs:dict) -> dict:
           y_max = int(np.max(segmentation[0]))
           measurement = int(0.5+len(segmentation[0])/600)
           measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
-          cv2.putText(img=img, text=str(int(0.5+len( segmentation[0])/600)), org=(x_min+20,y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)        
+          cv2.putText(img=im, text=str(int(0.5+len( segmentation[0])/600)), org=(x_min+20,y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)        
     for ind, item_mask in enumerate(masks):
         segmentation = np.where(item_mask == True)
         measurement = int(0.5+len(segmentation[0])/600)
