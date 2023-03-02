@@ -76,10 +76,13 @@ cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.005   # set a custom testing threshold
 from detectron2.data.datasets import register_coco_instances
 os.makedirs("./Fiber", exist_ok=True)
 try:
-  register_coco_instances("Fiber", {}, "./labels-fiver.json", "/content/Fiber")
+  register_coco_instances("Fiber", {}, "./labels-fiver.json", "Fiber")
 except:
+  if not os.isdir("fi-ber-detec-api"):
+    os.system('git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api')
+  os.system("cp fi-ber-detec-api/labels-fiver.json ."
   DatasetCatalog.clear()
-  register_coco_instances("Fiber", {}, "./labels-fiver.json", "/content/Fiber")
+  register_coco_instances("Fiber", {}, "./labels-fiver.json", "Fiber")
 
 
 Fiber_metadata = MetadataCatalog.get("Fiber")
