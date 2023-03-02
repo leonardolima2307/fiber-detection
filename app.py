@@ -73,7 +73,18 @@ cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (ballon). (see https:/
 cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth")  # path to the model we just trained
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.005   # set a custom testing threshold
 
+from detectron2.data.datasets import register_coco_instances
+os.makedirs("./Fiber", exist_ok=True)
+try:
+  register_coco_instances("Fiber", {}, "./labels-fiver.json", "/content/Fiber")
+except:
+  DatasetCatalog.clear()
+  register_coco_instances("Fiber", {}, "./labels-fiver.json", "/content/Fiber")
 
+
+Fiber_metadata = MetadataCatalog.get("Fiber")
+dataset_dicts = DatasetCatalog.get("Fiber")
+my_metadata=Fiber_metadata
 from io import BytesIO
 # Init is ran on server startup
 # Load your model to GPU as a global variable here using the variable name "model"
