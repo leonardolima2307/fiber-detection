@@ -190,4 +190,4 @@ def inference(model_inputs:dict) -> dict:
     #     overwrite = False
     #     )
     # Return the results as a dictionary
-    return {"csv_bytes":csv_bytes,"image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
+    return {"csv_bytes":"","image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
