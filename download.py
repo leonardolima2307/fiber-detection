@@ -7,7 +7,7 @@ def download_model():
     # do a dry run of loading the huggingface model, which will download weights
     #     os.mkdir("./outputs")
     #     response = wget.download(URL, "./outputs/model_final.pth")
-    print(response)
+    print('response')
     
 
 if __name__ == "__main__":
