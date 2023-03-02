@@ -95,7 +95,7 @@ def inference(model_inputs:dict) -> dict:
     input = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     global model
-    outputs = model(im)
+    outputs = model(input)
     v = Visualizer(im[:, :, ::-1],
                     metadata=my_metadata , #Fiber_metadata, 
                     scale=1, 
