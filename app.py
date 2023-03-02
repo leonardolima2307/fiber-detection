@@ -1,6 +1,7 @@
 import os
 import torch
 import base64
+from PIL import Image
 # You may need to restart your runtime prior to this, to let your installation take effect
 # Some basic setup
 # Setup detectron2 logger
@@ -152,11 +153,17 @@ def inference(model_inputs:dict) -> dict:
     
     csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
     csv_bytes=base64.b64encode(csv_bytes)
+    filepath_tmp=str(time.time())+".jpeg"
+    v.save(filepath_tmp)
+    image = Image.open(filepath_tmp)#Image.fromarray(x_sample.astype(np.uint8))
+    buffered = BytesIO()
+    image.save(buffered,format="JPEG")
+    image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
     #     buffered = BytesIO()
     #     v.get_image().save(buffered,format="JPEG")
     #     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    retval, buffer = cv2.imencode('.png', v.get_image())
-    image_bytes = base64.b64encode(buffer).decode('utf-8')
+    #     retval, buffer = cv2.imencode('.png', v.get_image())
+    #     image_bytes = base64.b64encode(buffer).decode('utf-8')
     #     # Upload the file to Cloudinary
     #     import cloudinary
     #     import cloudinary.uploader
@@ -183,4 +190,4 @@ def inference(model_inputs:dict) -> dict:
     #     overwrite = False
     #     )
     # Return the results as a dictionary
-    return {"csv_bytes":csv_bytes,"image_bytes":image_bytes} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
+    return {"csv_bytes":csv_bytes,"image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
