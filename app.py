@@ -88,7 +88,7 @@ except:
 Fiber_metadata = MetadataCatalog.get("Fiber")
 dataset_dicts = DatasetCatalog.get("Fiber")
 my_metadata=Fiber_metadata
-from io import BytesIO
+from io import BytesIO,StringIO
 # Init is ran on server startup
 # Load your model to GPU as a global variable here using the variable name "model"
 def init():
@@ -149,7 +149,7 @@ def inference(model_inputs:dict) -> dict:
             writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
             # Convert the CSV content to a bytes object
     
-    csv_bytes = io.StringIO( open(filename,"r").read()).read().encode("utf-8")
+    csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
     
     # Upload the file to Cloudinary
     upload_result = cloudinary.uploader.upload(
