@@ -34,6 +34,11 @@ RUN git clone https://github.com/facebookresearch/detectron2.git && \
 RUN pip install --no-cache-dir redis "opex==0.0.1" "redis-docker-harness==0.0.1"
 WORKDIR /
 
+
+RUN git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api
+RUN mkdir outputs
+RUN mv "fi-ber-detec-api/model_final (1).pth" "outputs/model_final.pth"
+
 # Install python packages
 RUN pip install --upgrade pip
 ADD requirements.txt requirements.txt
