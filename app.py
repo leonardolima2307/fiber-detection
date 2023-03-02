@@ -153,6 +153,10 @@ def inference(model_inputs:dict) -> dict:
     csv_bytes = StringIO( open(filename,"r").read()).read().encode("utf-8")
     
     # Upload the file to Cloudinary
+    import cloudinary
+    import cloudinary.uploader
+
+    import cloudinary.api
     upload_result = cloudinary.uploader.upload(
     csv_bytes,
     resource_type = "raw",
@@ -160,6 +164,10 @@ def inference(model_inputs:dict) -> dict:
     public_id =filename,
     overwrite = False
     )
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.uploader.upload
+    import cloudinary.api
     
     # Upload the image output to Cloudinary
     uploaded_image = cloudinary.uploader.upload(
