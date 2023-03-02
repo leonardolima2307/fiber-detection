@@ -53,7 +53,7 @@ ENV MODEL_NAME=andite/anything-v4.0
 
 # Add your model weight files 
 ADD download.py .
-RUN python download.py
+RUN python3 download.py
 
 # Add your custom app code, init() and inference()
 ADD app.py .
