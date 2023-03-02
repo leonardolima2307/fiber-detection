@@ -6,8 +6,8 @@
 
     },
     "example_output": {
-        "image_link": "https://example.com/img.png",
-        "csv_link": "https://example.com/file.csv",
+        "image_bytes": "<OUTPUT_IMAGE_BYTES>",
+        "csv_bytes": "<OUTPUT_CSV_BYTES>",
 
     },
     "version": "1"
