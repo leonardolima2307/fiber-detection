@@ -121,7 +121,7 @@ def inference(model_inputs:dict) -> dict:
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
     masks = np.asarray(outputs["instances"].pred_masks.to("cpu"))
     measurements = {}
-    im=v.get_image()[:, :, ::-1]
+    im=v.get_image() 
     for ind,item_mask in enumerate(masks):
         segmentation = np.where(item_mask == True)
         if  segmentation[1].any() and segmentation[0].any():
