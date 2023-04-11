@@ -118,7 +118,10 @@ def inference(model_inputs:dict) -> dict:
                     scale=1, 
                     instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
     )
-    v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    # Filter instances based on score
+    instances = outputs["instances"].to("cpu")
+    instances = instances[instances.scores > 0.90]
+    v = v.draw_instance_predictions(instances)
     masks = np.asarray(outputs["instances"].pred_masks.to("cpu"))
     measurements = {}
     filepath_tmp=str(time.time())+".jpeg"
