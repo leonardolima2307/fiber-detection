@@ -121,8 +121,10 @@ def inference(model_inputs:dict) -> dict:
     # Filter instances based on score
     instances = outputs["instances"].to("cpu")
     instances = instances[instances.scores > 0.90]
+    pred_masks = instances.pred_masks.to("cpu")
+    #draw img
     v = v.draw_instance_predictions(instances)
-    masks = np.asarray(outputs["instances"].pred_masks.to("cpu"))
+    masks = np.asarray(pred_masks)
     measurements = {}
     filepath_tmp=str(time.time())+".jpeg"
     v.save(filepath_tmp)
