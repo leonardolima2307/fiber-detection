@@ -58,5 +58,9 @@ COPY . .
 EXPOSE 8000
 COPY test.jpg .
 COPY test.py .
-CMD ["python", "-u", "app.py"]
-# RUN python3 -u test.py
+ADD server.py .
+
+EXPOSE 8000
+
+CMD python -u server.py
+RUN python -u test.py

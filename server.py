@@ -3,8 +3,10 @@
 
 # Instead, edit the init() and inference() functions in app.py
 
-from sanic import Sanic, response
 import subprocess
+
+from sanic import Sanic, response
+
 import app as user_src
 
 # We do the model load-to-GPU step on server startup
@@ -24,6 +26,7 @@ def healthcheck(request):
         gpu = True
 
     return response.json({"state": "healthy", "gpu": gpu})
+
 
 # Inference POST handler at '/' is called for every http call from Banana
 @server.route('/', methods=["POST"]) 

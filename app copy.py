@@ -245,9 +245,11 @@ def process(img_bytes,model,crop=False) :
 
 
 
+app = Potassium("my_app")
 
+# @app.init runs at startup, and initializes the app's context
+@app.init
 def init():
-    global model
     # device = 0 if torch.cuda.is_available() else -1
     cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
@@ -262,11 +264,18 @@ def init():
     }
     return context
 
-def inference(model_inputs:dict) -> dict:
-    global model
-    # Parse arguments
-    img_bytes  = model_inputs.get('img_bytes', None)
-    crop=model_inputs.get("crop") 
+# @app.handler is an http post handler running for every call
+@app.handler("/",  gpu=True)
+def handler(context: dict, request: Request) -> Response:
+    img_bytes = request.json.get("img_bytes")
+    crop=request.json.get("crop") 
+    model = context.get("model")
     outputs = process(img_bytes,model,crop) 
-    return outputs 
 
+    return Response(
+        json = {"outputs": outputs}, 
+        status=200
+    )
+
+if __name__ == "__main__":
+    app.serve()
