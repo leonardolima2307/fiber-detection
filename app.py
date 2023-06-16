@@ -264,7 +264,7 @@ def init():
     return context
 
 # @app.handler is an http post handler running for every call
-@app.handler()
+@app.handler("/",  gpu=True)
 def handler(context: dict, request: Request) -> Response:
     img_bytes = request.json.get("img_bytes")
     crop=request.json.get("crop") 
