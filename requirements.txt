@@ -3,13 +3,13 @@ pandas
 numpy
 Pillow
 cloudinary==1.32.0
-websockets
 opencv-python-headless
 pyyaml==5.1
 torch
 torchvision
 sanic==22.6.2
-diffusers==0.10.2
+websockets==10.0
+accelerate>=0.12.0
 ftfy==6.1.1
-accelerate==0.15.0
+
 
