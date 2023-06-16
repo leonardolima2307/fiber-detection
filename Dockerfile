@@ -16,7 +16,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y python3 python3-pip
 
-RUN apk add --update python3 py3-pip
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" \
