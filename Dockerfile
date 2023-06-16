@@ -48,7 +48,7 @@ RUN git clone https://huggingface.co/spaces/mosidi/fi-ber-detec-api && \
     mkdir outputs && \
     mv "fi-ber-detec-api/labels-fiver.json" "./labels-fiver.json" && \
     mkdir "./Fiber"
-COPY "./fi-ber-detec-api/configs" "./configs"
+RUN cp -R   "fi-ber-detec-api/configs" "./configs"
 # Install application dependencies
 COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
