@@ -103,8 +103,8 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
     v = Visualizer(im[:, :, ::-1], metadata=Fiber_metadata, scale=1, instance_mode=ColorMode.IMAGE_BW)
     v = v.draw_instance_predictions(outputs.to("cpu"))
     final_image = v.get_image() 
-    print(type(final_image))
-    print(final_image.shape,final_image)
+    # print(type(final_image))
+    # print(final_image.shape,final_image)
 
     masks = np.asarray(outputs.pred_masks.to("cpu"))
     bbox = np.asarray(outputs.pred_boxes.to("cpu"))
@@ -177,9 +177,9 @@ def process_and_visualize_cropped_images(image , predictor_fiber, predictor_inte
         # Clean up the temporary crop image and individual measurements CSV file
         os.remove(crop_path)
         os.remove(csv_output_path)
-
+    final_csv_path=os.path.join(output_dir, str(time.time())+'all_measurements.csv')
     # Save the combined measurements to a CSV file
-    all_measurements.to_csv(os.path.join(output_dir, str(time.time())+'all_measurements.csv'), index=False)
+    all_measurements.to_csv(final_csv_path, index=False)
     filepath_tmp=str(time.time())+".jpeg"
     # Concatenate the visualized images and save the result
     final_image = cv2.hconcat(visualized_images)
