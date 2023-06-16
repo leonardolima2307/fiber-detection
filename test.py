@@ -13,7 +13,7 @@ model_inputs = {
     "crop": True,
 }
 
-res = requests.post('http://localhost:8000/', json = model_inputs)
+res = requests.post('http://127.0.0.1:8000/', json = model_inputs)
 
 image_byte_string = res.json()["image_base64"]
 print(res.json().keys())

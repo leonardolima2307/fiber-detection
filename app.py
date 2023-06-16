@@ -209,7 +209,7 @@ output_dir="."
 
 
 
-def handler(img_bytes,model,crop=False) :
+def process(img_bytes,model,crop=False) :
     # Parse arguments
     img_byte_str =img_bytes# model_inputs.get('img_bytes', None)
     nparr = np.fromstring(base64.b64decode(img_byte_str), np.uint8)
@@ -269,7 +269,7 @@ def handler(context: dict, request: Request) -> Response:
     img_bytes = request.json.get("img_bytes")
     crop=request.json.get("crop") 
     model = context.get("model")
-    outputs =handler(img_bytes,model,crop) 
+    outputs = process(img_bytes,model,crop) 
 
     return Response(
         json = {"outputs": outputs}, 
