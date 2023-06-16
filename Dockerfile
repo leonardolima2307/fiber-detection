@@ -14,7 +14,9 @@ RUN apt-get update && \
     apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx python3-dev python3-pip git wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 python3-pip
 
+RUN apk add --update python3 py3-pip
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir detectron2==0.6 "protobuf<4.0.0" \
@@ -62,4 +64,4 @@ EXPOSE 8000
 
 
 
-CMD python -u server.py
+CMD python3 -u server.py
