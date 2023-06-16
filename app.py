@@ -21,7 +21,7 @@ import base64
 # import some other libraries
 import pandas as pd
 import torch
-
+import time
 # import some other libraries
 from PIL import Image
 from potassium import Potassium, Request, Response
@@ -146,7 +146,7 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
             writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
 
     return final_image
-def process_and_visualize_cropped_images(image , predictor_fiber, predictor_intersection, Fiber_metadata, output_dir, iou_threshold=0.00):
+def process_and_visualize_cropped_images(image , predictor_fiber, predictor_intersection, Fiber_metadata, output_dir, iou_threshold=0.00,cropping=True):
     import os
 
     import cv2
@@ -161,6 +161,9 @@ def process_and_visualize_cropped_images(image , predictor_fiber, predictor_inte
     img2 = img[:, width//3:2*width//3, :]
     img3 = img[:, 2*width//3:, :]
     crops = [img1, img2, img3]
+    if not cropping:
+        crops = [img]
+
     
     # Create an empty dataframe to store all measurements
     all_measurements = pd.DataFrame(columns=['ID', 'Measurement', 'X_Min', 'X_Max', 'Y_Min', 'Y_Max', 'Crop'])
@@ -206,7 +209,7 @@ output_dir="."
 
 
 
-def handler(img_bytes,model) :
+def handler(img_bytes,model,crop=False) :
     # Parse arguments
     img_byte_str =img_bytes# model_inputs.get('img_bytes', None)
     nparr = np.fromstring(base64.b64decode(img_byte_str), np.uint8)
@@ -225,7 +228,7 @@ def handler(img_bytes,model) :
     #     for id, data in measurements.items():
     #         writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
     predictor_fiber=model
-    all_measurements,filepath_tmp=process_and_visualize_cropped_images(im, predictor_fiber, predictor_fiber, Fiber_metadata, output_dir, iou_threshold=0.00)
+    all_measurements,filepath_tmp=process_and_visualize_cropped_images(im, predictor_fiber, predictor_fiber, Fiber_metadata, output_dir, iou_threshold=0.00,cropping=crop)
 
     with open(all_measurements, 'rb') as f:
         csv_bytes = f.read()
@@ -250,7 +253,7 @@ def init():
     cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
     cfg.DATASETS.TEST = () 
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9
     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
     model = DefaultPredictor(cfg)
     # return model
@@ -264,8 +267,9 @@ def init():
 @app.handler()
 def handler(context: dict, request: Request) -> Response:
     img_bytes = request.json.get("img_bytes")
+    crop=request.json.get("crop") 
     model = context.get("model")
-    outputs =handler(img_bytes,model) 
+    outputs =handler(img_bytes,model,crop) 
 
     return Response(
         json = {"outputs": outputs}, 

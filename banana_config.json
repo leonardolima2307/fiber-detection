@@ -2,13 +2,12 @@
     "name": "Detectron2 fiber detection",
     "category": "Computer Vision",
     "example_input": {
-        "img_bytes": "<INPUT_IMAGE_BYTES>"
-
+        "img_bytes": "<INPUT_IMAGE_BYTES>",
+        "crop": true,
     },
     "example_output": {
         "image_bytes": "<OUTPUT_IMAGE_BYTES>",
         "csv_bytes": "<OUTPUT_CSV_BYTES>",
-
     },
     "version": "1"
 }
