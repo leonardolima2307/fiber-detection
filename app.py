@@ -1,7 +1,19 @@
+# from sanic import Sanic, text
+import base64
+
+# import some common libraries
+import json
 import os
+import time
+from io import BytesIO, StringIO
+
 import cloudinary
 import cv2
 import numpy as np
+
+# import some other libraries
+import pandas as pd
+import torch
 
 # import some common detectron2 utilities
 from detectron2 import model_zoo
@@ -9,29 +21,18 @@ from detectron2.data import MetadataCatalog
 from detectron2.data.datasets import register_coco_instances
 from detectron2.engine import DefaultPredictor
 
-# import some common libraries
-import json
-from io import BytesIO, StringIO
-
 # import some other libraries
 from numpy.lib.type_check import imag
-# from sanic import Sanic, text
-import base64
 
-# import some other libraries
-import pandas as pd
-import torch
-import time
 # import some other libraries
 from PIL import Image
 from potassium import Potassium, Request, Response
 
+# def setup_logger():
+#     """Setup detectron2 logger."""
+#     logging.basicConfig(level=logging.INFO)
 
-def setup_logger():
-      """Setup detectron2 logger."""
-  logging.basicConfig(level=logging.INFO)
-
-setup_logger()
+# setup_logger()
 os.makedirs("./Fiber", exist_ok=True)
 cfg = get_cfg()
 # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
