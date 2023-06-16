@@ -58,5 +58,5 @@ COPY . .
 EXPOSE 8000
 COPY test.jpg .
 COPY test.py .
-CMD ["python3", "-u", "app.py"]
+CMD ["python", "-u", "app.py"]
 # RUN python3 -u test.py
