@@ -52,15 +52,15 @@ RUN wget -O "model_final v3.pth" "https://cdn-lfs.huggingface.co/repos/5a/7a/5a7
     mv "model_final v3.pth" "outputs/model_final.pth"
 
 # Add application code
-COPY app.py .
+ADD app.py .
+ADD test.py .
+ADD server.py .
+COPY test.jpg .
 COPY . .
 
 EXPOSE 8000
-COPY test.jpg .
-COPY test.py .
-ADD server.py .
 
-EXPOSE 8000
+
 
 CMD python -u server.py
 RUN python -u test.py

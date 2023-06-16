@@ -26,7 +26,6 @@ from numpy.lib.type_check import imag
 
 # import some other libraries
 from PIL import Image
-from potassium import Potassium, Request, Response
 
 # def setup_logger():
 #     """Setup detectron2 logger."""

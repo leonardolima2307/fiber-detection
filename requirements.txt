@@ -3,7 +3,8 @@ opencv-python-headless
 pyyaml==5.1
 torch
 torchvision
-potassium
+sanic==22.6.2
+accelerate
 einops
 cloudinary==1.32.0
 pandas
