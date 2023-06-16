@@ -185,7 +185,7 @@ def process_and_visualize_cropped_images(image , predictor_fiber, predictor_inte
     final_image = cv2.hconcat(visualized_images)
     cv2.imwrite(filepath_tmp, final_image)
     # Return the final visualized image
-    return   all_measurements,filepath_tmp
+    return   final_csv_path,filepath_tmp
 
 my_metadata=Fiber_metadata
 
