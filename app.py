@@ -17,6 +17,9 @@ import torch
 
 # import some common detectron2 utilities
 from detectron2 import model_zoo
+
+# Do initial configuration
+from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.data.datasets import register_coco_instances
 from detectron2.engine import DefaultPredictor
