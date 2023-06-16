@@ -1,4 +1,5 @@
 wget
+websockets
 opencv-python-headless
 pyyaml==5.1
 torch
