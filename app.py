@@ -36,24 +36,6 @@ from PIL import Image
 
 # setup_logger()
 os.makedirs("./Fiber", exist_ok=True)
-cfg = get_cfg()
-# cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-# cfg now already contains everything we've set previously. We changed it a little bit for inference:
-cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-cfg.DATASETS.TRAIN = ("Fiber",)
-cfg.DATASETS.TEST = ()   # no metrics implemented for this dataset
-cfg.DATALOADER.NUM_WORKERS = 2
-cfg.MODEL.WEIGHTS = "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 2
-cfg.SOLVER.BASE_LR = 0.02
-cfg.SOLVER.MAX_ITER = 600    # 300 iterations seems good enough, but you can certainly train longer
-cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset
-cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2 # 3 classes (data, fig, hazelnut)
-
-cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")  # path to the model we just trained
-
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5   # set a custom testing threshold
-
 
 # Registering an "empty" dataset
 dataset_name = "tmp"
@@ -250,8 +232,12 @@ def process(img_bytes,model,crop=False) :
 
 def init():
     global model
+    cfg = get_cfg()
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    # cfg now already contains everything we've set previously. We changed it a little bit for inference:
+    cfg.merge_from_file("./configs/detectron2/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # device = 0 if torch.cuda.is_available() else -1
-    cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+    # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
     cfg.DATASETS.TEST = () 
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9
