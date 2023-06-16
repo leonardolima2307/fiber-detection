@@ -235,7 +235,7 @@ def init():
     cfg = get_cfg()
     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
     # cfg now already contains everything we've set previously. We changed it a little bit for inference:
-    cfg.merge_from_file("./configs/detectron2/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+    cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
     # device = 0 if torch.cuda.is_available() else -1
     # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
