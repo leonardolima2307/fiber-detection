@@ -63,4 +63,3 @@ EXPOSE 8000
 
 
 CMD python -u server.py
-RUN python -u test.py
