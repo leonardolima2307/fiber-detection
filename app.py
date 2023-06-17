@@ -53,7 +53,6 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
     import torch
     from detectron2.structures import Boxes, pairwise_iou
     from detectron2.utils.visualizer import ColorMode, Visualizer
-
     def mask_to_binary_image(mask_data):
         binary_image = (mask_data * 255).astype(np.uint8)
         return binary_image
@@ -61,7 +60,6 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
     def half_perimeter(binary_image):
         # Find contours in the binary image
         contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
         # Check if any contour was found
         if len(contours) == 0:
             return 0
@@ -75,42 +73,19 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
 
         # Assuming there's only one contour (i.e., one polygon), calculate its perimeter
         perimeter = cv2.arcLength(max_area_contour, closed=True)
-    
         # Return half of the perimeter
         return perimeter / 2
-
-    def filter_intersections(predictor_fiber, predictor_intersection, image, iou_threshold=0.00):
-        outputs_fiber = predictor_fiber(image)
-        outputs_intersection = predictor_intersection(image)
-    
-        class_2_indices = (outputs_intersection["instances"].pred_classes == 1).nonzero().squeeze(1)
-        outputs_intersection["instances"] = outputs_intersection["instances"][class_2_indices]
-
-        boxes_fiber = Boxes(outputs_fiber["instances"].pred_boxes.tensor)
-        boxes_intersection = Boxes(outputs_intersection["instances"].pred_boxes.tensor)
-
-        iou_matrix = pairwise_iou(boxes_fiber, boxes_intersection)
-        if not iou_matrix.any():
-            return  outputs_fiber["instances"]
-        keep_indices = [i for i in range(len(outputs_fiber["instances"])) if torch.max(iou_matrix[i]) < iou_threshold]
-        filtered_fiber_instances = outputs_fiber["instances"][keep_indices]
-
-        return filtered_fiber_instances
-
     im = cv2.imread(image_path)
-
     outputs =predictor_fiber(im)["instances"] # filter_intersections(predictor_fiber, predictor_intersection, im)
     v = Visualizer(im[:, :, ::-1], metadata=Fiber_metadata, scale=1, instance_mode=ColorMode.IMAGE_BW)
     v = v.draw_instance_predictions(outputs.to("cpu"))
     final_image = v.get_image() 
     # print(type(final_image))
     # print(final_image.shape,final_image)
-
     masks = np.asarray(outputs.pred_masks.to("cpu"))
     bbox = np.asarray(outputs.pred_boxes.to("cpu"))
-
+    print(outputs)
     measurements = {}
-
     for ind, item_mask in enumerate(masks):
         binary_image = mask_to_binary_image(item_mask)
         box = bbox[ind]
@@ -129,7 +104,6 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
         writer.writerow(['ID', 'Measurement', 'X_Min', 'X_Max', 'Y_Min', 'Y_Max'])
         for id, data in measurements.items():
             writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
-
     return final_image
 def process_and_visualize_cropped_images(image , predictor_fiber, predictor_intersection, Fiber_metadata, output_dir, iou_threshold=0.00,cropping=True):
     import os
@@ -200,18 +174,6 @@ def process(img_bytes,model,crop=False) :
     nparr = np.fromstring(base64.b64decode(img_byte_str), np.uint8)
     input = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     im=input
-    cloudinary.config(
-      cloud_name ="dwn1gc4fa",
-      api_key = "437434332838172",
-      api_secret = "LBV4C69UuS6ri3u8lcUl04WPPBQ",
-      secure = True
-    )
-    # filename=str(time.time())+'dmeasurements.csv'
-    # with open(filename, mode='w') as file:
-    #     writer = csv.writer(file)
-    #     writer.writerow(['ID', 'Measurement', 'X_Min', 'X_Max', 'Y_Min', 'Y_Max'])
-    #     for id, data in measurements.items():
-    #         writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
     predictor_fiber=model
     all_measurements,filepath_tmp=process_and_visualize_cropped_images(im, predictor_fiber, predictor_fiber, Fiber_metadata, output_dir, iou_threshold=0.00,cropping=crop)
 
@@ -240,7 +202,7 @@ def init():
     # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
     cfg.DATASETS.TEST = () 
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.9
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.70
     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
     model = DefaultPredictor(cfg)
     # return model
@@ -255,6 +217,21 @@ def inference(model_inputs:dict) -> dict:
     # Parse arguments
     img_bytes  = model_inputs.get('img_bytes', None)
     crop=model_inputs.get("crop") 
+    # threeshold=model_inputs.get("threeshold",None) 
+    # if threeshold:
+    #     cfg = get_cfg()
+    #     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    #     # cfg now already contains everything we've set previously. We changed it a little bit for inference:
+    #     cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
+    #     # device = 0 if torch.cuda.is_available() else -1
+    #     # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+    #     # set the remaining config options for test time
+    #     cfg.DATASETS.TEST = () 
+    #     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = threeshold
+    #     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
+    #     model_ = DefaultPredictor(cfg)
+    #     outputs = process(img_bytes,model,crop) 
+    #     return outputs 
     outputs = process(img_bytes,model,crop) 
     return outputs 
 
