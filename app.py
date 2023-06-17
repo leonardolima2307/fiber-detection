@@ -192,9 +192,19 @@ def process(img_bytes,model,crop=False) :
 
 
 
+
+
 def init():
     global model
     cfg = get_cfg()
+    cfg.DATASETS.TRAIN = ("Fiber",)
+    cfg.DATASETS.TEST = ()   # no metrics implemented for this dataset
+    cfg.DATALOADER.NUM_WORKERS = 2
+    cfg.SOLVER.IMS_PER_BATCH = 2
+    cfg.SOLVER.BASE_LR = 0.02
+    cfg.SOLVER.MAX_ITER = 600    # 300 iterations seems good enough, but you can certainly train longer
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2  # 3 classes (data, fig, hazelnut)
     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
     # cfg now already contains everything we've set previously. We changed it a little bit for inference:
     cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
@@ -202,7 +212,8 @@ def init():
     # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     # set the remaining config options for test time
     cfg.DATASETS.TEST = () 
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.70
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.90
+    print(cfg)
     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
     model = DefaultPredictor(cfg)
     # return model
@@ -213,6 +224,7 @@ def init():
     return context
 
 def inference(model_inputs:dict) -> dict:
+    print("hello")
     global model
     # Parse arguments
     img_bytes  = model_inputs.get('img_bytes', None)
@@ -234,4 +246,5 @@ def inference(model_inputs:dict) -> dict:
     #     return outputs 
     outputs = process(img_bytes,model,crop) 
     return outputs 
+
 
