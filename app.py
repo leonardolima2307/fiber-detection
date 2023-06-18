@@ -7,7 +7,6 @@ import os
 import time
 from io import BytesIO, StringIO
 
-import cloudinary
 import cv2
 import numpy as np
 
@@ -182,10 +181,20 @@ def process(img_bytes,model,crop=False) :
     csv_base64_str = csv_bytes.decode('utf-8')
     #     filepath_tmp=str(time.time())+".jpeg"
     #     v.save(filepath_tmp)
-    image  = Image.fromarray(im) #Image.open(filepath_tmp)#Image.fromarray(x_sample.astype(np.uint8))
+    # image  = Image.fromarray(im) #Image.open(filepath_tmp)#Image.fromarray(x_sample.astype(np.uint8))
+    # buffered = BytesIO()
+    # image.save(buffered,format="JPEG")
+    # image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    # Open the image file
+    image = Image.open(filepath_tmp)
+
+    # Create a BytesIO buffer and save the image in JPEG format
     buffered = BytesIO()
-    image.save(buffered,format="JPEG")
+    image.save(buffered, format="JPEG")
+    # Get the base64 representation
     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    os.remove(filepath_tmp)
+    os.remove(all_measurements)
     return {"csv_bytes":csv_base64_str,"image_bytes":image_base64} # {'image_link': uploaded_image["url"],'csv_link': upload_result["url"]}
 
 
