@@ -44,7 +44,7 @@ Fiber_metadata = MetadataCatalog.get(dataset_name)
 MetadataCatalog.get(dataset_name).thing_classes = ['Fiber', 'Fiber_inter']
 MetadataCatalog.get(dataset_name).thing_dataset_id_to_contiguous_id = {0: 0, 1: 1}
 
-def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_intersection, Fiber_metadata, csv_output_path, iou_threshold=0.00):
+def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_intersection, Fiber_metadata, csv_output_path, iou_threshold=0.00,crop_ind=0):
     import csv
     import os
 
@@ -83,12 +83,11 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
     # print(type(final_image))
     # print(final_image.shape,final_image)
     masks = np.asarray(outputs.pred_masks.to("cpu"))
-    bbox = np.asarray(outputs.pred_boxes.to("cpu"))
-    print(outputs)
+    # bbox = np.asarray(outputs.pred_boxes.to("cpu"))
     measurements = {}
     for ind, item_mask in enumerate(masks):
         binary_image = mask_to_binary_image(item_mask)
-        box = bbox[ind]
+        # box = bbox[ind]
         segmentation = np.where(item_mask == True)
         if segmentation[1].any() and segmentation[0].any():
             x_min = int(np.min(segmentation[1]))
@@ -97,13 +96,13 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
             y_max = int(np.max(segmentation[0]))
             measurement = int(half_perimeter(binary_image)/3.3)
             measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
-            cv2.putText(img=final_image, text=str(measurement), org=(x_min+20, y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)
-
+            cv2.putText(img=final_image, text=str(crop_ind)+str(id)+":"+str(measurement), org=(x_min+20, y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)
     with open(csv_output_path, mode='w') as file:
         writer = csv.writer(file)
         writer.writerow(['ID', 'Measurement', 'X_Min', 'X_Max', 'Y_Min', 'Y_Max'])
         for id, data in measurements.items():
-            writer.writerow([id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
+            display_id=int(str(crop_ind)+str(id))
+            writer.writerow([display_id, data['measurement'], data['x_min'], data['x_max'], data['y_min'], data['y_max']])
     return final_image
 def process_and_visualize_cropped_images(image , predictor_fiber, predictor_intersection, Fiber_metadata, output_dir, iou_threshold=0.00,cropping=True):
     import os
@@ -140,7 +139,7 @@ def process_and_visualize_cropped_images(image , predictor_fiber, predictor_inte
         csv_output_path = os.path.join(output_dir, f'measurements_crop_{i}.csv')
         
         # Process the cropped image
-        visualized_image = visualize_and_extract_measurements(crop_path, predictor_fiber, predictor_intersection, Fiber_metadata, csv_output_path, iou_threshold)
+        visualized_image = visualize_and_extract_measurements(crop_path, predictor_fiber, predictor_intersection, Fiber_metadata, csv_output_path, iou_threshold,crop_ind=i)
         visualized_images.append(visualized_image)
         
         # Load the measurements and add them to the main dataframe
@@ -196,24 +195,16 @@ def process(img_bytes,model,crop=False) :
 
 def init():
     global model
+    torch.cuda.empty_cache()
     cfg = get_cfg()
+    cfg.MODEL.DEVICE = "cuda"
     cfg.DATASETS.TRAIN = ("Fiber",)
-    cfg.DATASETS.TEST = ()   # no metrics implemented for this dataset
-    cfg.DATALOADER.NUM_WORKERS = 2
-    cfg.SOLVER.IMS_PER_BATCH = 2
-    cfg.SOLVER.BASE_LR = 0.02
-    cfg.SOLVER.MAX_ITER = 600    # 300 iterations seems good enough, but you can certainly train longer
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset
+    cfg.DATASETS.TEST = ()   # no metrics implemented for this dataset # faster, and good enough for this toy dataset
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2  # 3 classes (data, fig, hazelnut)
-    # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-    # cfg now already contains everything we've set previously. We changed it a little bit for inference:
     cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
-    # device = 0 if torch.cuda.is_available() else -1
-    # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-    # set the remaining config options for test time
+
     cfg.DATASETS.TEST = () 
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.90
-    print(cfg)
     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
     model = DefaultPredictor(cfg)
     # return model
@@ -224,26 +215,10 @@ def init():
     return context
 
 def inference(model_inputs:dict) -> dict:
-    print("hello")
     global model
     # Parse arguments
     img_bytes  = model_inputs.get('img_bytes', None)
     crop=model_inputs.get("crop") 
-    # threeshold=model_inputs.get("threeshold",None) 
-    # if threeshold:
-    #     cfg = get_cfg()
-    #     # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-    #     # cfg now already contains everything we've set previously. We changed it a little bit for inference:
-    #     cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
-    #     # device = 0 if torch.cuda.is_available() else -1
-    #     # cfg.merge_from_file("./detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-    #     # set the remaining config options for test time
-    #     cfg.DATASETS.TEST = () 
-    #     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = threeshold
-    #     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
-    #     model_ = DefaultPredictor(cfg)
-    #     outputs = process(img_bytes,model,crop) 
-    #     return outputs 
     outputs = process(img_bytes,model,crop) 
     return outputs 
 
