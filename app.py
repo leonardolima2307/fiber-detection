@@ -96,7 +96,7 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
             y_max = int(np.max(segmentation[0]))
             measurement = int(half_perimeter(binary_image)/3.3)
             measurements[ind] = {'measurement': measurement, 'x_min': x_min, 'x_max': x_max, 'y_min': y_min, 'y_max': y_max}
-            cv2.putText(img=final_image, text=str(crop_ind)+str(id)+":"+str(measurement), org=(x_min+20, y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)
+            cv2.putText(img=final_image, text=str(crop_ind)+str(ind)+":"+str(measurement), org=(x_min+20, y_min-10), fontFace=cv2.FONT_HERSHEY_TRIPLEX, fontScale=0.8, color=(0, 255, 0),thickness=2)
     with open(csv_output_path, mode='w') as file:
         writer = csv.writer(file)
         writer.writerow(['ID', 'Measurement', 'X_Min', 'X_Max', 'Y_Min', 'Y_Max'])
