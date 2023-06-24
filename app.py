@@ -71,9 +71,14 @@ def visualize_and_extract_measurements(image_path, predictor_fiber, predictor_in
                 max_area_contour = contour
 
         # Assuming there's only one contour (i.e., one polygon), calculate its perimeter
-        perimeter = cv2.arcLength(max_area_contour, closed=True)
+        try: 
+           perimeter= cv2.arcLength(max_area_contour, closed=True)
+        except: 
+            print(max_area_contour )
+            perimeter=0
         # Return half of the perimeter
-        return perimeter / 2
+        return perimeter / 2 
+    
     im = cv2.imread(image_path)
     outputs =predictor_fiber(im)["instances"] # filter_intersections(predictor_fiber, predictor_intersection, im)
     v = Visualizer(im[:, :, ::-1], metadata=Fiber_metadata, scale=1, instance_mode=ColorMode.IMAGE_BW)
@@ -213,7 +218,7 @@ def init():
     cfg.merge_from_file("./configs/detectron2/mask_rcnn_R_50_FPN_3x.yaml")
 
     cfg.DATASETS.TEST = () 
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.90
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.75
     cfg.MODEL.WEIGHTS = cfg.MODEL.WEIGHTS = os.path.join("./outputs", "model_final.pth") # os.path.join(model_dir, "model_final.pth")
     model = DefaultPredictor(cfg)
     # return model
