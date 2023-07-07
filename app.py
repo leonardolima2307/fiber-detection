@@ -122,7 +122,7 @@ def inference(model_inputs:dict) -> dict:
     instances = outputs["instances"].to("cpu")
     instances = instances[instances.scores > 0.90]
     pred_masks = instances.pred_masks.to("cpu")
-    #draw img 
+    #draw i
     v = v.draw_instance_predictions(instances)
     masks = np.asarray(pred_masks)
     measurements = {}
