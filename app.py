@@ -150,7 +150,7 @@ def inference(model_inputs:dict) -> dict:
       secure = True
     )
     
-    # Write the measurements to a CSV file
+    # Write the measurements to a CSV file 
     filename=str(time.time())+'dmeasurements.csv'
     with open(filename, mode='w') as file:
         writer = csv.writer(file)
