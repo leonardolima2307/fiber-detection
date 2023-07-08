@@ -122,7 +122,7 @@ def inference(model_inputs:dict) -> dict:
     instances = outputs["instances"].to("cpu")
     instances = instances[instances.scores > 0.90]
     pred_masks = instances.pred_masks.to("cpu")
-    #draw i
+    #draw img
     v = v.draw_instance_predictions(instances)
     masks = np.asarray(pred_masks)
     measurements = {}
@@ -150,7 +150,7 @@ def inference(model_inputs:dict) -> dict:
       secure = True
     )
     
-    # Write the measurements to a CSV file 
+    # Write the measurements to a CSV file
     filename=str(time.time())+'dmeasurements.csv'
     with open(filename, mode='w') as file:
         writer = csv.writer(file)
